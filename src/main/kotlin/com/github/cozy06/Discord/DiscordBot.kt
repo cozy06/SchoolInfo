@@ -22,7 +22,7 @@ import java.time.ZoneId
 
 class DiscordBot {
     fun botOn() {
-        val token = "MTExMDA1OTM3OTc0NDU3OTYxNA.Gm1nfu.zUhy8dPPasZT1CwdnS41__bmyuBwSYf8FbkPBY"
+        val token = "YOUR_BOT_TOKEN_HERE"
 
         val jda = JDABuilder.createDefault(token)
             .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT)
