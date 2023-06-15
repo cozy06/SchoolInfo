@@ -1,6 +1,7 @@
-package com.github.cozy06
+package com.github.cozy06.School
 
 import com.github.cozy06.File.Companion.toJson
+import com.github.cozy06.HttpLogic
 import com.github.cozy06.HttpLogic.Companion.httpGET
 import java.net.URL
 import java.net.URLEncoder

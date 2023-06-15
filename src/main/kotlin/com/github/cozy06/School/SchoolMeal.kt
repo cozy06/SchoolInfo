@@ -1,6 +1,7 @@
-package com.github.cozy06
+package com.github.cozy06.School
 
 import com.github.cozy06.File.Companion.toJson
+import com.github.cozy06.HttpLogic
 import com.github.cozy06.HttpLogic.Companion.httpGET
 import java.net.URL
 
@@ -17,7 +18,8 @@ class SchoolMeal {
                         "ATPT_OFCDC_SC_CODE" to school_ATPT_OFCDC_SC_CODE,
                         "SD_SCHUL_CODE" to school_SD_SCHUL_CODE,
                         "MLSV_YMD" to date
-                    ))?.toJson()?.getJSONArray("mealServiceDietInfo")?.get(1).toString().toJson().getJSONArray("row").get(0).toString().toJson().getString("DDISH_NM").replace("<br/>", "\n")
+                    )
+                )?.toJson()?.getJSONArray("mealServiceDietInfo")?.get(1).toString().toJson().getJSONArray("row").get(0).toString().toJson().getString("DDISH_NM").replace("<br/>", "\n")
 
             return SchoolMeal
         }
