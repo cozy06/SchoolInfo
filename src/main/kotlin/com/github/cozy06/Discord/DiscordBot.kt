@@ -18,11 +18,12 @@ import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder
 import org.json.JSONException
 import java.io.File
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 
 class DiscordBot {
     fun botOn() {
-        val token = "YOUR_BOT_TOKEN_HERE"
+        val token = "YOUR_BOT_CODE"
 
         val jda = JDABuilder.createDefault(token)
             .enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT)
@@ -64,7 +65,7 @@ class DiscordBot {
 
                 when(command) {
                     "schedule", "일정" -> {
-                        if(parameters.size < 3 && parameters[0] != "read" && parameters[0] != "읽기") {
+                        if(parameters.size < 3 && parameters[0] != "read" && parameters[0] != "읽기" && parameters[0] != "리스트") {
                             channel.sendMessage("Enter please").queue()
                             return
                         }
@@ -174,14 +175,30 @@ class DiscordBot {
                                     playerMessage.reply("no schedule [$date]").complete()
                                 }
                             }
+
+                            "list", "리스트" -> {
+                                File("${System.getProperty("user.dir")}/schedule").walk().forEach {
+                                    var schedule = "없음"
+                                    if (it.isFile) {
+                                        val fileDate = it.toString().split("/").last().split(".")[0]
+
+                                        if(schedule == "없음") {
+                                            schedule = "${fileDate.replace("-", ".")}\n${File("${System.getProperty("user.dir")}/schedule/$fileDate.txt").readFile()}"
+                                        }
+                                        else{
+                                            schedule = "$schedule\n${fileDate.replace("-", ".")}\n${File("${System.getProperty("user.dir")}/schedule/$fileDate.txt").readFile()}"
+                                        }
+                                        playerMessage.reply(schedule).complete()
+                                    }
+                                }
+                            }
                         }
                     }
                     "timeline", "시간표" -> {
-                        val date = try {
-                            parameters[0]
-                        } catch (_: IndexOutOfBoundsException) {
-                            val zoneId = ZoneId.of("Asia/Seoul")
-                            LocalDate.now(zoneId).toString()
+                        val zoneId = ZoneId.of("Asia/Seoul")
+                        val date = when(parameters.size > 0) {
+                            true -> parameters[0]
+                            false -> LocalDate.now(zoneId).toString()
                         }
 
                         val schoolCode = SchoolCode.findSchoolCode("마포고등학교")
@@ -217,13 +234,11 @@ class DiscordBot {
                     }
 
                     "meal", "급식" -> {
-                        val date = try {
-                            parameters[0]
-                        } catch (_: IndexOutOfBoundsException) {
-                            val zoneId = ZoneId.of("Asia/Seoul")
-                            LocalDate.now(zoneId).toString()
+                        val zoneId = ZoneId.of("Asia/Seoul")
+                        val date = when(parameters.size > 0) {
+                            true -> parameters[0]
+                            false -> LocalDate.now(zoneId).toString()
                         }
-
 
                         val schoolCode = SchoolCode.findSchoolCode("마포고등학교")
                         val ATPT_OFCDC_SC_CODE = schoolCode.first
